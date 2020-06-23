@@ -30,6 +30,13 @@ dependencies {
 //    }
 }
 
+//subprojects {
+//    ext {
+//        set('springCloudAlibabaVersion', "2.2.1.RELEASE")
+//        set('springCloudVersion', "Hoxton.SR5")
+//    }
+//}
+
 test {
     useJUnitPlatform()
 }

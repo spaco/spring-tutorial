@@ -1,4 +1,3 @@
 rootProject.name = 'sleuth'
-include 'sleuth-user-service'
 include 'sleuth-order-service'
-
+include 'sleuth-user-service'
