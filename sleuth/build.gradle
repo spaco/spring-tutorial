@@ -1,42 +1,89 @@
-plugins {
-    id 'java'
-}
-
-group 'com.example'
-version '1.0-SNAPSHOT'
-
-repositories {
-    mavenCentral()
-}
-
-configurations {
-    developmentOnly
-    runtimeClasspath {
-        extendsFrom developmentOnly
+buildscript {
+    repositories {
+        mavenLocal()
+        maven { url "http://maven.aliyun.com/nexus/content/groups/public/" }
+        maven { url "https://oss.sonatype.org/content/groups/public/" }
+        maven { url "https://repo.spring.io/libs-milestone/" }
+        jcenter()
+        mavenCentral()
     }
-    compileOnly {
-        extendsFrom annotationProcessor
+    // 版本
+    ext {
+        set('springBootVersion', "2.2.8.RELEASE")
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
     }
 }
 
-dependencies {
-//    implementation 'org.springframework.boot:spring-boot-starter-web'
-//    compileOnly 'org.projectlombok:lombok'
-//    developmentOnly 'org.springframework.boot:spring-boot-devtools'
-//    annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
-//    annotationProcessor 'org.projectlombok:lombok'
-//    testImplementation('org.springframework.boot:spring-boot-starter-test') {
-//        exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
+//configurations {
+//    developmentOnly
+//    runtimeClasspath {
+//        extendsFrom developmentOnly
 //    }
-}
-
-//subprojects {
-//    ext {
-//        set('springCloudAlibabaVersion', "2.2.1.RELEASE")
-//        set('springCloudVersion', "Hoxton.SR5")
+//    compileOnly {
+//        extendsFrom annotationProcessor
 //    }
 //}
 
-test {
-    useJUnitPlatform()
+allprojects {
+    apply plugin: 'idea'
+    apply plugin: 'java'
+    apply plugin: 'org.springframework.boot'
+    apply plugin: 'io.spring.dependency-management'
+
+    group 'com.example'
+    version '1.0-SNAPSHOT'
+    sourceCompatibility = '1.8'
+
+    // 版本
+    ext {
+        set('springCloudVersion', "Hoxton.SR5")
+        set('springBootVersion', "2.2.8.RELEASE")
+        set('springCloudAlibabaVersion', "2.2.1.RELEASE")
+    }
+
+    repositories {
+        mavenLocal()
+        maven { url "http://maven.aliyun.com/nexus/content/groups/public/" }
+        maven { url "https://oss.sonatype.org/content/groups/public/" }
+        maven { url "https://repo.spring.io/libs-milestone/" }
+        jcenter()
+        mavenCentral()
+
+        google()
+        maven { url 'https://jitpack.io' }
+    }
+
+    dependencies {
+        compileOnly 'org.projectlombok:lombok'
+        annotationProcessor 'org.projectlombok:lombok'
+//        developmentOnly 'org.springframework.boot:spring-boot-devtools'
+        annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
+        testCompile('org.springframework.boot:spring-boot-starter-test') {
+            exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
+        }
+    }
+
+    dependencyManagement {
+        imports {
+            mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+            mavenBom "com.alibaba.cloud:spring-cloud-alibaba-dependencies:${springCloudAlibabaVersion}"
+        }
+        dependencies {
+
+        }
+    }
+
+    test {
+        useJUnitPlatform()
+    }
+
+    jar {
+        enabled = true
+    }
+
+    bootJar {
+        enabled = false
+    }
 }
